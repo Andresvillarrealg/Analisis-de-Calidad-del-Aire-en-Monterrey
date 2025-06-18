@@ -1,0 +1,630 @@
+---
+title: "reto etapa 3 intervalos de medias"
+author: "gian media2020rco innocenti"
+date: "2023-10-09"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R media2020rkdown
+
+
+## Prueba de diferencia intervalos de media 
+
+```{r}
+```
+
+
+```{r}
+M=read.csv('DatasetAnovaComparacionMedias_Concentracion.csv')
+#M
+
+
+```
+
+```{r}
+M1=M
+```
+
+
+# 2020 contra 2021
+
+```{r}
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+
+for (i in 1:length(listacolumn2020s)){
+  df_2020 <- M[M$Year == 2020, listacolumn2020s[i]]
+  df_2021 <- M[M$Year == 2021, listacolumn2020s[i]]
+  #calcular desviacion estandar
+  desv2020=sd(df_2020, na.rm = TRUE)
+  desv2021=sd(df_2021, na.rm = TRUE)
+  #calcular medias
+  media2020=mean(df_2020, na.rm = TRUE)
+  media2021=mean(df_2021, na.rm = TRUE)
+  #calcular numero de observaciones
+  n2020=sum(!is.na(df_2020))
+  n2021=sum(!is.na(df_2020))
+  alfa=0.05
+  #calcular z
+  Z=abs(qnorm(alfa/2))
+  EE= sqrt((desv2020^2/n2020)+(desv2021^2/n2021))                   #Error estandar
+  #calcular limites
+  Linf=(media2020-media2021)-(Z*EE)
+  Lsup=(media2020-media2021)+(Z*EE)
+  cat("[",Linf,",",Lsup,"]\n")
+  if(i== 1){
+      plot(NA,xlim=c(-0.01,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante O3 \n 2020 vs 2021 ")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.001,1,round(Linf,3))
+  text(Lsup+0.001,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+
+
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  text(0.007, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.007, 0.16, "Como el Limite Superior y el \n Limite Inferior del Intervalo \n son positivos en 2020 hubo una mayor \n concentracion de O3", cex = 0.5)
+  }
+  else if(i==2){
+          plot(NA,xlim=c(-0.159,0.1),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante CO \n 2020 vs 2021 ")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.015,1+0.04,round(Linf,3))
+  text(Lsup+0.015,1+0.04,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  
+    text(0.07, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.07, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de C0", cex = 0.5)
+  }
+  
+    else if(i==3){
+          plot(NA,xlim=c(-0.007,0.002),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante NO2 \n 2020 vs 2021 ")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.00065,1+0.04,round(Linf,5))
+  text(Lsup+0.00065,1+0.04,round(Lsup,5))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+      text(0.0012, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.0012, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de NO2", cex = 0.5)
+  }
+  else{
+          plot(NA,xlim=c(-10,10),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante PM10 \n 2020 vs 2021 ")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-1.3,1,round(Linf,3))
+  text(Lsup+1.3,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+        text(7, 0.4, "Analisis:", font = 2, cex = 0.75)  # Title in bold
+text(7, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de PM10", cex = 0.75)
+  }
+
+}
+```
+
+# Centro 2020 contra Centro 2021
+
+```{r}
+M <- subset(M1, Estacion %in% c("Centro_2020", "Centro_2021"))
+
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+
+for (i in 1:length(listacolumn2020s)){
+  df_2020 <- M[M$Year == 2020, listacolumn2020s[i]]
+  df_2021 <- M[M$Year == 2021, listacolumn2020s[i]]
+  #calcular desviacion estandar
+  desv2020=sd(df_2020, na.rm = TRUE)
+  desv2021=sd(df_2021, na.rm = TRUE)
+  #calcular medias
+  media2020=mean(df_2020, na.rm = TRUE)
+  media2021=mean(df_2021, na.rm = TRUE)
+  #calcular numero de observaciones
+  n2020=sum(!is.na(df_2020))
+  n2021=sum(!is.na(df_2020))
+  alfa=0.05
+  #calcular z
+  Z=abs(qnorm(alfa/2))
+  EE= sqrt((desv2020^2/n2020)+(desv2021^2/n2021))                   #Error estandar
+  #calcular limites
+  Linf=(media2020-media2021)-(Z*EE)
+  Lsup=(media2020-media2021)+(Z*EE)
+  cat("[",Linf,",",Lsup,"]\n")
+  if(i== 1){
+      plot(NA,xlim=c(-0.01,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante O3 \n Estacion Centro 2020 vs Estacion Centro 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.001,1,round(Linf,3))
+  text(Lsup+0.001,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+
+
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  text(0.007, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.007, 0.16, "Como el Limite Superior y el \n Limite Inferior del Intervalo \n son positivos en 2020 hubo una mayor \n concentracion de O3", cex = 0.5)
+  }
+  else if(i==2){
+          plot(NA,xlim=c(-0.1,0.3),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante CO \n Estacion Centro 2020 vs Estacion Centro 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.025,1+0.04,round(Linf,3))
+  text(Lsup+0.025,1+0.04,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  
+    text(0.27, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.27, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n positivos en 2020 hubo una mayor \n concentracion de C0", cex = 0.5)
+  }
+  
+    else if(i==3){
+          plot(NA,xlim=c(-0.01,0.003),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante NO2 \n Estacion Centro 2020 vs Estacion Centro 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.00085,1+0.04,round(Linf,5))
+  text(Lsup+0.00085,1+0.04,round(Lsup,5))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+      text(0.0018, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.0018, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de NO2", cex = 0.5)
+  }
+  else{
+          plot(NA,xlim=c(-14.3,9),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante PM10 \n Estacion Centro 2020 vs Estacion Centro 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-1.3,1,round(Linf,3))
+  text(Lsup+1.3,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+        text(5, 0.4, "Analisis:", font = 2, cex = 0.75)  # Title in bold
+text(5, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de PM10", cex = 0.75)
+  }
+
+}
+```
+
+
+
+
+# Noreste2 2020 contra Noreste2 2021
+
+
+
+
+```{r}
+M <- subset(M1, Estacion %in% c("Noreste2_2020", "Noreste2_2021"))
+
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+
+for (i in 1:length(listacolumn2020s)){
+  df_2020 <- M[M$Year == 2020, listacolumn2020s[i]]
+  df_2021 <- M[M$Year == 2021, listacolumn2020s[i]]
+  #calcular desviacion estandar
+  desv2020=sd(df_2020, na.rm = TRUE)
+  desv2021=sd(df_2021, na.rm = TRUE)
+  #calcular medias
+  media2020=mean(df_2020, na.rm = TRUE)
+  media2021=mean(df_2021, na.rm = TRUE)
+  #calcular numero de observaciones
+  n2020=sum(!is.na(df_2020))
+  n2021=sum(!is.na(df_2020))
+  alfa=0.05
+  #calcular z
+  Z=abs(qnorm(alfa/2))
+  EE= sqrt((desv2020^2/n2020)+(desv2021^2/n2021))                   #Error estandar
+  #calcular limites
+  Linf=(media2020-media2021)-(Z*EE)
+  Lsup=(media2020-media2021)+(Z*EE)
+  cat("[",Linf,",",Lsup,"]\n")
+  if(i== 1){
+      plot(NA,xlim=c(-0.01,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante O3 \n Estacion Noreste2 2020 vs Estacion Noreste2 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.001,1,round(Linf,3))
+  text(Lsup+0.001,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+
+
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  text(0.007, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.007, 0.16, "Como el Limite Superior y el \n Limite Inferior del Intervalo \n son positivos en 2020 hubo una mayor \n concentracion de O3", cex = 0.5)
+  }
+  else if(i==2){
+          plot(NA,xlim=c(-0.55,0.25),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante CO \n Estacion Noreste2 2020 vs Estacion Noreste2 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.055,1+0.04,round(Linf,3))
+  text(Lsup+0.055,1+0.04,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  
+    text(0.17, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.17, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de C0", cex = 0.5)
+  }
+  
+    else if(i==3){
+          plot(NA,xlim=c(-0.02,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante NO2 \n Estacion Noreste2 2020 vs Estacion Noreste2 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.00185,1+0.04,round(Linf,5))
+  text(Lsup+0.00185,1+0.04,round(Lsup,5))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+      text(0.006, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.006, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de NO2", cex = 0.5)
+  }
+  else{
+          plot(NA,xlim=c(-10,10),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante PM10 \n Estacion Noreste2 2020 vs Estacion Noreste2 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-1.3,1,round(Linf,3))
+  text(Lsup+1.3,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+        text(5, 0.4, "Analisis:", font = 2, cex = 0.75)  # Title in bold
+text(5, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de PM10", cex = 0.75)
+  }
+
+}
+```
+# Sureste 3 2020 contra Sureste 3 2021
+
+
+```{r}
+M <- subset(M1, Estacion %in% c("Sureste3_2020", "Sureste3_2021"))
+
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+
+for (i in 1:length(listacolumn2020s)){
+  df_2020 <- M[M$Year == 2020, listacolumn2020s[i]]
+  df_2021 <- M[M$Year == 2021, listacolumn2020s[i]]
+  #calcular desviacion estandar
+  desv2020=sd(df_2020, na.rm = TRUE)
+  desv2021=sd(df_2021, na.rm = TRUE)
+  #calcular medias
+  media2020=mean(df_2020, na.rm = TRUE)
+  media2021=mean(df_2021, na.rm = TRUE)
+  #calcular numero de observaciones
+  n2020=sum(!is.na(df_2020))
+  n2021=sum(!is.na(df_2020))
+  alfa=0.05
+  #calcular z
+  Z=abs(qnorm(alfa/2))
+  EE= sqrt((desv2020^2/n2020)+(desv2021^2/n2021))                   #Error estandar
+  #calcular limites
+  Linf=(media2020-media2021)-(Z*EE)
+  Lsup=(media2020-media2021)+(Z*EE)
+  cat("[",Linf,",",Lsup,"]\n")
+  if(i== 1){
+      plot(NA,xlim=c(-0.01,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante O3 \n Estacion Sureste3 2020 vs Estacion Sureste3 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.001,1,round(Linf,3))
+  text(Lsup+0.001,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+
+
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  text(0.007, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.007, 0.16, "Como el Limite Superior y el \n Limite Inferior del Intervalo \n son negativos en 2021 hubo una mayor \n concentracion de O3", cex = 0.5)
+  }
+  else if(i==2){
+          plot(NA,xlim=c(-0.55,0.25),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante CO \n Estacion Sureste3 2020 vs Estacion Sureste3 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.055,1+0.04,round(Linf,3))
+  text(Lsup+0.055,1+0.04,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+  
+    text(0.17, 0.33, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.17, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de C0", cex = 0.5)
+  }
+  
+    else if(i==3){
+          plot(NA,xlim=c(-0.02,0.01),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante NO2 \n Estacion Sureste3 2020 vs Estacion Sureste3 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-0.00185,1+0.04,round(Linf,5))
+  text(Lsup+0.00185,1+0.04,round(Lsup,5))
+  abline(v=0,col="orange",lty=3,lwd=2)
+  legend("topright", legend = c("Intervalo de Confianza de Media", "Diferencia (2020-2021)", "Linea en Zero"),
+       col = c("blue", "red", "orange"), lwd = c(2, 1.5, 2), pch = c(-1, 19, -1),
+       title = "Leyenda",cex = 0.5)
+      text(0.006, 0.37, "Analisis:", font = 2, cex = 0.5)  # Title in bold
+text(0.0058, 0.16, "Como el Limite Superior es positivo y el \n Limite Inferior Negativo y el 0 se encuentra dentro del \n Intervalo podemos concluir que no hay diferencia\n significativa entre las medias del Contaminante\n NO2 entre 2020 y 2021", cex = 0.5)
+  }
+  else{
+          plot(NA,xlim=c(-10,10),ylim=c(0,2),yaxt="n",ylab="",main="Intervalo de Confianza de Medias Para el Contaminante PM10 \n Estacion Sureste3 2020 vs Estacion Sureste3 2021")
+  arrows(Linf,1,Lsup,1,code=3,angle=90,col="blue",lwd=2)
+#arroes(x1,y1,x2,y2)
+  points(media2020-media2021,1,pch=19,col="red",cex=1.5)
+  text(Linf-1.3,1,round(Linf,3))
+  text(Lsup+1.3,1,round(Lsup,3))
+  abline(v=0,col="orange",lty=3,lwd=2)
+        text(5, 0.4, "Analisis:", font = 2, cex = 0.75)  # Title in bold
+text(5, 0.16, "Como el Limite Superior y el Limite \n Inferior del Intervalo  son \n negativos en 2021 hubo una mayor \n concentracion de PM10", cex = 0.75)
+  }
+
+}
+```
+
+
+
+
+```{r}
+M=read.csv('DatasetAnovaComparacionMedias_Concentracion.csv')
+# Assuming your data frame is named "df"
+M$Estacion2 <- gsub("Sureste3", "Sur", M$Estacion2)
+M$Estacion2 <- gsub("Noreste2", "Norte", M$Estacion2)
+M$Year <- gsub("2020", "20", M$Year)
+M$Year <- gsub("2021", "21", M$Year)
+
+```
+
+# Anova Multifactotial
+
+
+```{r}
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+
+column_name <- listacolumn2020s[1]
+contaminante <- M[[column_name]] 
+
+ano=as.factor(M$Year)
+estacion=as.factor(M$Estacion2)
+modelo=aov(contaminante ~ ano * estacion)
+summary(modelo)
+analisis=TukeyHSD(modelo,conf.level=0.95)
+
+
+#La unica concentracion con p valor menor a 0.05 el unico factor que se encuentra en el valor de 0.05 aceptable para H0 es los de concentracion de 15-10 son las unicas que no son significativamente diferente. Por lo que se debe rechazar H0 porque solo una combinacion de valores de concentracion no son diferentes significativamente.
+
+# normalilibrary(nortest)
+#dad de los residuos
+library(nortest)
+ad.test(modelo$residuals)
+
+#$H_0 : \mu_r=0$
+#$H_1 : \mu_r!=0$
+#Como p valor =0.5757 no rechazo H0 por lo que podemos conjcluir que los residuos se distribuyen normalmente.
+# Homocedasticidad
+
+plot(modelo$fitted.values, modelo$residuals)
+abline(h = 0, col = "red", lty = 2)
+
+
+#En esta grafica se puede ver como el modelo cuenta con homoceasticidad desde el intervalo en #modelofitted.values 14-20. El unico intervalo donde no se excibe la homoceasticidad es en modelofitted.values=10 en la grafica.
+
+# independencia 
+
+library(lmtest)
+dwtest(modelo)
+#plot(seq(1,50), modelo$residuals,xlab='observacion',ylab='Residuo',main='normalidad residuos')
+
+
+
+#$H_0: Cov(u_i,u_j)=0$
+#$H_1: Cov(u_i,u_j)!=0$
+#Como  el p valor despues de la prueba = 0.424 no rechazo H0 por lo que puedo concluir que los #residuales son independientes.
+
+
+# Obtén los intervalos de confianza de resistencia por concentración de madera dura.
+#t.test(modelo$residuals)
+
+
+```
+
+
+
+
+x
+
+```{r}
+FactorialPlotList <- list()
+BoxPlotList <- list()
+
+
+listacolumn2020s=c('O3Concentracion','CO','NO2','PM10')
+for (i in 1:length(listacolumn2020s) ){
+  column_name <- listacolumn2020s[i]
+contaminante <- M[[column_name]] 
+
+ano=as.factor(M$Year)
+estacion=as.factor(M$Estacion2)
+modelo=aov(contaminante ~ ano * estacion)
+analisis=TukeyHSD(modelo,conf.level=0.95)
+anovaxestacion=analisis$estacion
+listaetiquetas=as.vector(rownames(anovaxestacion))
+
+anovaxestacion=analisis$estacion
+# Sample values for the y-axis
+# Debug prints to check the data
+linflist=as.vector(anovaxestacion[, 2])
+lsuplist=as.vector(anovaxestacion[, 3])
+
+plot(NA, xlim = c(min(linflist)-0.5, max(lsuplist)+0.5), ylim = c(0, length(listaetiquetas) + 1), yaxt = "n", ylab = "", main = paste("95% de Confianza para Prueba de Anova Estacion : Estacion para ",listacolumn2020s[i]))
+
+# Add y-axis labels
+par(cex.axis = 0.4) 
+axis(2, at = 1:length(listaetiquetas), labels = listaetiquetas)
+abline(h = 1:length(listaetiquetas), col = "gray", lty = 2)
+
+abline(v=0,col="orange",lty=3,lwd=2)
+# Loop to add arrows for each y-value
+for (j in 1:length(listaetiquetas)) {
+  Linf <- linflist[j]
+  Lsup <- lsuplist[j]
+  arrows(Linf, j, Lsup, j, code = 3, angle = 90, col = "blue", lwd = 1)
+}
+
+
+anovaxano=analisis$`ano:estacion`
+
+listaetiquetasano=as.vector(rownames(anovaxano))
+target_values <- c("21:Centro-20:Centro", "21:Norte-20:Norte", "21:Sur-20:Sur")
+
+# Find the positions using which()
+positions <- which(listaetiquetasano %in% target_values)
+listaetiquetasano <- listaetiquetasano[listaetiquetasano %in% target_values]
+print(listaetiquetasano)
+# Sample values for the y-axis
+# Debug prints to check the data
+
+linflist=as.vector(anovaxano[, 2])
+lsuplist=as.vector(anovaxano[, 3])
+linflist <- linflist[positions]
+lsuplist <- lsuplist[positions]
+
+width <- 10  # Adjust the width as needed
+height <- 8  # Adjust the height as needed
+
+nombre=paste(column_name,"_Anova_Grafica.pdf")
+# Create a larger plot with increased margins
+pdf(nombre, width = width, height = height)  # Save the plot as a PDF file
+par(mfrow = c(1, 1), mar = c(4, 5, 2, 5))
+
+
+
+plot(NA, xlim = c(min(linflist)-0.5, max(lsuplist)+0.5), ylim = c(0, length(listaetiquetasano) + 1), yaxt = "n", ylab = "", main = paste("95% de Confianza para Prueba de Anova de Tuckey Año : Estacion para ",listacolumn2020s[i]))
+
+# Add y-axis labels
+par(cex.axis = 0.03) 
+# Add y-axis labels to the left and right based on position
+for (k in 1:length(listaetiquetasano)) {
+  label <- listaetiquetasano[k]
+  if (k %% 2 == 1) {
+    # Odd-numbered labels go on the left
+    #par(cex.axis = 0.1)
+    mtext(label, side = 2, at = k, line = 0.5, las = 0,cex = 1.2,tck = 0.1)
+  } else {
+    #par(cex.axis = 0.1)
+    # Even-numbered labels go on the right
+    mtext(label, side = 4, at = k, line = 0.5, las = 0,cex = 1.2,tck = 0.1)
+  }
+}
+abline(h = 1:length(listaetiquetasano), col = "gray", lty = 2)
+
+abline(v=0,col="orange",lty=3,lwd=2)
+# Loop to add arrows for each y-value
+arrowhead_length_low <- 0.1  # Length of the lower arrowhead
+arrowhead_length_high <- 0.3 
+for (o in 1:length(listaetiquetasano)) {
+  Linf <- linflist[o]
+  Lsup <- lsuplist[o]
+
+  # Draw the arrow with custom arrowheads
+  y_pos <- o
+  # Lower arrowhead
+  segments(Linf, y_pos - arrowhead_length_high, Linf, y_pos + arrowhead_length_high, col = "blue", lwd = 1)
+  # Main line
+  segments(Linf, y_pos, Lsup, y_pos, col = "blue", lwd = 1)
+  # Upper arrowhead
+  segments(Lsup, y_pos - arrowhead_length_high, Lsup, y_pos + arrowhead_length_high, col = "blue", lwd = 1)
+}
+
+dev.off()  # Close the PDF device
+
+library(ggplot2)
+library(dplyr)
+library(effects)
+
+data <- data.frame(Year = ano, Estacion = estacion,Contaminante=contaminante)
+# Interaction Plot
+
+# Main Effects Plot (for Factor1)
+data %>%
+  group_by(Year) %>%
+  summarize(mean_response = mean(Contaminante)) %>%
+  ggplot(aes(Year, mean_response)) +
+  geom_bar(stat = "identity")
+
+
+
+# Create a list of ggplot objects
+
+# Factorial Plot
+factorialplot<-ggplot(data, aes(x = Year, y = Contaminante, color = Estacion)) +
+  geom_point() +
+  facet_wrap(~Estacion) +
+  labs(
+    title = paste("Grafica de Dispersion de Contaminante vs. Año por Estacion",listacolumn2020s[i]),
+    x = "Año",
+    y = "Contaminante"
+  )
+FactorialPlotList[[i]] <- factorialplot
+
+# Box Plot with a title
+boxplot<-ggplot(data, aes(x = Year, y = Contaminante, fill = Estacion)) +
+  geom_boxplot() +
+  labs(
+    title = paste("Box Plot de Contaminante vs. Año por Estacion para ",listacolumn2020s[i]),
+    x = "Año",
+    y = "Contaminante"
+  )
+BoxPlotList[[i]] <- boxplot
+}
+
+
+
+
+for (c in 1:4) {
+  print(FactorialPlotList[[c]])
+}
+
+for (d in 1:4) {
+  print(BoxPlotList[[d]])
+}
+
+```
+
+
+
+
+H0: las medias entre todos las poblaciones son iguales
+H1: las medias entre todos las poblaciones no son iguales
+
+
+
+
+
+

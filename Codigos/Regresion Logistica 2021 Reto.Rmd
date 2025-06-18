@@ -1,0 +1,83 @@
+---
+title: "Regresion Logistica 2021 Reto"
+author: "Andrés Villarreal González"
+date: "2023-10-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(nnet)
+library(tidyverse)
+library(caret)
+library(MASS)
+
+# Leer los datos
+data <- read.csv("data_2021_RegLog.csv")
+
+# Ver las primeras filas para entender la estructura
+head(data)
+```
+
+```{r}
+set.seed(123)  # Para reproducibilidad
+
+# Crear índices para el conjunto de entrenamiento
+trainIndex <- createDataPartition(data$O3Concentracion, p = 0.8, list = FALSE)
+
+# Dividir los datos usando los índices
+train_data <- data[trainIndex, ]
+test_data <- data[-trainIndex, ]
+
+```
+
+```{r}
+set.seed(123)
+
+# Ajustar el modelo
+model <- multinom(O3Concentracion ~ ., data = train_data)
+summary(model)
+
+```
+
+```{r}
+# Predecir en el conjunto de prueba
+predicted_probs <- predict(model, newdata = test_data, type = "probs")
+predicted_class <- predict(model, newdata = test_data, type = "class")
+
+
+# Convertir tanto las predicciones como la variable real a factores con niveles 1, 2, 3 y 4.
+predicted_class <- factor(predicted_class, levels = c(1, 2, 3))
+true_class <- factor(test_data$O3Concentracion, levels = c(1, 2, 3))
+
+# Ahora crea la matriz de confusión
+confusionMatrix(predicted_class, true_class)
+
+```
+
+```{r}
+coefficients <- coef(model)
+std_errors <- summary(model)$standard.errors
+t_statistics <- coefficients / std_errors
+df <- nrow(train_data) - length(coefficients)
+p_values <- 2 * (1 - pt(abs(t_statistics), df))
+p_values
+```
+```{r}
+coef(model)
+```
+
+```{r}
+library(nnet)
+library(car)
+Anova(model, type="II")
+```
+```{r}
+library(car)
+Anova(model, test="Wald")
+```
+
+
